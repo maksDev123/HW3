@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Positions</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles_positions.css') }}">
+</head>
+<body>
+    <h1>All Positions</h1>
+    <ul>
+        {% for position in positions %}
+            <div class="position">    
+                <h2>General Info</h2>
+                <li>Title: {{ position.title }}, Salary: {{ position.salary }}</li>
+                <h2>Landmarks</h2>
+                <ul>
+                    {% for landmark in position.landmark %}
+                        <li>{{ landmark.title }}</li>
+                    {% endfor %}
+                </ul>
+                <button class="position-button" data-id="{{ position.id }}">Send Request</button>
+            </div>
+        {% endfor %}
+    </ul>
+</body>
+<script>
+    document.querySelectorAll('.position-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const positionId = this.getAttribute('data-id');
+            fetch(`/positions/${positionId}`, { method: 'POST' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to send request');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    alert(data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Unauthorized: Please login / register');
+                });
+        });
+    });
+</script>
+</html>

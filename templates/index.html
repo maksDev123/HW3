@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+
+
+    <script>
+        function addUniversity() {
+            var container = document.getElementById("universityContainer");
+            var select = document.createElement("select");
+            select.name = "landmark[]";
+            select.required = true;
+            select.classList.add("education_choice")
+            var universities = ["Choose University", "KPI", "LNU", "UCU", "Harvard", "Oxford"];
+            for (var i = 0; i < universities.length; i++) {
+                var option = document.createElement("option");
+                option.value = universities[i];
+                option.text = universities[i];
+                select.appendChild(option);
+            }
+            container.appendChild(select);
+            container.appendChild(document.createElement("br"));
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <h2>Registration Form</h2>
+        <form class="form_register" method="post" action="/register">
+            <label for="first_name">First Name:</label><br>
+            <input type="text" id="first_name" name="first_name" required><br><br>
+
+            <label for="last_name">Last Name:</label><br>
+            <input type="text" id="last_name" name="last_name" required><br><br>
+
+            <h3>CV Information:</h3>
+            <label for="experience">Experience:</label><br>
+            <input type="text" id="experience" name="experience" required><br><br>
+
+            <h3>University:</h3>
+            <div id="universityContainer"></div>
+            <button type="button" onclick="addUniversity()">Add University</button><br><br>
+
+            <input type="submit" value="Submit" class = "submit">
+        </form>
+    </div>
+
+</body>
+</html>

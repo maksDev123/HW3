@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+
+    <script>
+        function addLandmark() {
+            var container = document.getElementById("landmarkContainer");
+            var select = document.createElement("select");
+            select.name = "landmark[]";
+            select.required = true;
+            select.classList.add("education_choice");
+            var landmarks = ["Choose Landmark", "Eiffel Tower", "Statue of Liberty", "Colosseum", "Sydney Opera House"];
+            for (var i = 0; i < landmarks.length; i++) {
+                var option = document.createElement("option");
+                option.value = landmarks[i];
+                option.text = landmarks[i];
+                select.appendChild(option);
+            }
+            container.appendChild(select);
+            container.appendChild(document.createElement("br"));
+        }
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <h2>Post Position</h2>
+        <form class="form_register" method="post" action="/post_position_form">
+            <label for="title">Position title</label><br>
+            <input type="text" id="title" name="title" required><br><br>
+
+            <label for="salary">Salary:</label><br> 
+            <input type="text" id="salary" name="salary" required><br><br>
+
+            <h3>Landmark:</h3>
+            <div id="landmarkContainer" class="university_choices"> </div>
+            <button type="button" onclick="addLandmark()">Add Landmark</button><br><br>
+
+            <input class = "button_submit_position" type="submit" value="Submit">
+        </form>
+    </div>
+</body>
+</html>

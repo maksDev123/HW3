@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Applications</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<div class="container">
+    <h1>Applications without recommendation</h1>
+    <div class = "content_applications">
+        {% for application in applications %}
+            <div class="application">
+                <h2>Applicant Info</h2>
+                <li>Name: {{ application.applicant.first_name }} {{ application.applicant.last_name }}</li>
+                <h2>Application Details</h2>
+                <p>{{ application.recommendation }}</p>
+                <div class="update-container">
+                    <label for="recommendation">Enter Recommendation:</label>
+                    <input type="text" id="recommendation-{{ application.id }}">
+                    <button class="update-application-button" data-id="{{ application.id }}">Update Application</button>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+</div>
+<body>
+<script>
+document.querySelectorAll('.update-application-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const applicationId = this.getAttribute('data-id');
+        const recommendation = document.getElementById(`recommendation-${applicationId}`).value;
+        fetch(`/applications/${applicationId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ recommendation: recommendation })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update application');
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Unauthorized: Please login / register');
+            });
+    });
+});
+</script>
+</body>
+</html>

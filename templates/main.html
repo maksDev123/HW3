@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles_main.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirect Buttons</title>
+</head>
+<body>
+    <h1>Redirect Buttons</h1>
+    <button onclick="redirectTo('/login_form')">Login</button>
+    <button onclick="redirectTo('/register')">Register</button>
+
+    <button onclick="redirectTo('/positions')">Open positions</button>
+    <button onclick="redirectTo('/post_position')">Post positions</button>
+    <button onclick="redirectTo('/applications')">Applications (Stage 1)</button>
+    <button onclick="redirectTo('/applications_filled')">Applications (Stage 2)</button>
+    
+    <button onclick="redirectTo('/offers')">Offers</button>
+    
+    <script>
+        function redirectTo(url) {
+            window.location.href = url;
+        }
+    </script>
+</body>
+</html>

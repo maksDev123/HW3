@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Applications</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
+</head>
+<div class="container">
+    <h1>Offers for user</h1>
+    <div class = "content_applications">
+        {% for offer in offers %}
+            <div class="application">
+                <h2>Proposed salary</h2>
+                <p>{{ offer.offered_salary }}</p>
+                <div class="update-container">
+                    <strong for="recommendation">Do you accept this offer:</strong>
+                    <div class = "align_choice">
+                    <div class = "block_choice">Accept: <input class = "choice_btn" type="radio" name="accept" id="accept-{{ offer.id }}" value="Accept">
+                    </div>
+                    <div class = "block_choice">Reject: <input class = "choice_btn"  type="radio" name="accept" id="reject-{{ offer.id }}" value="Decline">
+                </div></div>    
+                    <button class="update-application-button" data-id="{{ offer.id }}">Send response</button>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+</div>
+<body>
+<script>
+    
+document.querySelectorAll('.update-application-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const applicationId = this.getAttribute('data-id');
+        const accept = document.getElementById(`accept-${applicationId}`).checked;
+        console.log(accept)
+
+        fetch(`/acceptance/${applicationId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ accept: 1 ? accept : 0 })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update application');
+                }
+                return response.text();
+            })
+            .then(data => {
+                alert(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Unauthorized: Please login / register');
+            });
+    });
+});
+</script>
+</body>
+</html>
