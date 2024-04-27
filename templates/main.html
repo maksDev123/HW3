@@ -18,6 +18,11 @@
     
     <button onclick="redirectTo('/offers')">Offers</button>
     
+    <h1>Queries</h1>
+    <button onclick="redirectTo('/applicants_with_applications')">Get Users that applied to at least one position </button>
+    <button onclick="redirectTo('/positions_with_three_applicants')">Positions with at least 3 applicants </button>
+    <button onclick="redirectTo('/applicants_with_offers')">Applicants that got offer </button>
+
     <script>
         function redirectTo(url) {
             window.location.href = url;
