@@ -12,9 +12,20 @@
         {% for application in applications %}
             <div class="application">
                 <h2>Applicant Info</h2>
-                <li>Name: {{ application.applicant.first_name }} {{ application.applicant.last_name }}</li>
+                <p>Name: {{ application.applicant.first_name }} {{ application.applicant.last_name }}</p>
                 <h2>Application Details</h2>
+                <p>{{ application.applicant.cv.experience }}</p>
+                <h3>Recommendation</h3>
                 <p>{{ application.recommendation }}</p>
+                <h3>Universities:</h3>
+                
+                
+                <div>
+                    {% for university in application.applicant.cv.universities %}
+                        <p>{{ university.name }}</p>
+                    {% endfor %}
+                </div>
+
                 <div class="update-container">
                     <label for="salary">Enter proposed salary:</label>
                     <input type="text" id="salary-{{ application.id }}">

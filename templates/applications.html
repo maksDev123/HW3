@@ -14,7 +14,15 @@
                 <h2>Applicant Info</h2>
                 <li>Name: {{ application.applicant.first_name }} {{ application.applicant.last_name }}</li>
                 <h2>Application Details</h2>
-                <p>{{ application.recommendation }}</p>
+                <p>{{ application.applicant.cv.experience }}</p>
+                <h3>Universities:</h3>
+                
+                <div>
+                    {% for university in application.applicant.cv.universities %}
+                        <p>{{ university.name }}</p>
+                    {% endfor %}
+                </div>
+
                 <div class="update-container">
                     <label for="recommendation">Enter Recommendation:</label>
                     <input type="text" id="recommendation-{{ application.id }}">

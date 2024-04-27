@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import text
 
-TESTING = 1
+TESTING = 0
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///users.sqlite3"
@@ -19,18 +19,6 @@ position_landmark_association = db.Table('position_landmarks',
 user_logedin = None
 
 # Entities
-
-class Applicant(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(45))
-    last_name = db.Column(db.String(45))
-    id_cv = db.Column(db.Integer, db.ForeignKey('cv.id'))
-    applications = db.relationship('Application', back_populates='applicant', lazy='dynamic')
-    offers = db.relationship('Offer', back_populates='applicant', lazy='dynamic')
-    
-    def __init__(self, first_name, last_name) -> None:
-        self.first_name = first_name
-        self.last_name = last_name
 
 
 class Application(db.Model):
@@ -109,11 +97,27 @@ class University(db.Model):
         self.name = name
         self.location = location
 
+class Applicant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(45))
+    last_name = db.Column(db.String(45))
+    cv_id = db.Column(db.Integer, db.ForeignKey('cv.id'), unique=True)
+    cv = db.relationship("CV", back_populates="applicant", uselist=False)
+
+    applications = db.relationship('Application', back_populates='applicant', lazy='dynamic')
+    offers = db.relationship('Offer', back_populates='applicant', lazy='dynamic')
+    
+    def __init__(self, first_name, last_name) -> None:
+        self.first_name = first_name
+        self.last_name = last_name
+
+
 class CV(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     experience = db.Column(db.String(450))
+    applicant = db.relationship("Applicant", back_populates="cv")
     universities = db.relationship('University', secondary=cv_universities_association, backref=db.backref('cvs', lazy='dynamic'))
-
+    
     def __init__(self, experience) -> None:
         self.experience = experience
 
@@ -238,6 +242,7 @@ def get_applications():
 @app.route('/applications_filled')
 def get_applications_filled():
     applications = Application.query.filter(Application.recommendation != "").all()
+
     return render_template('applications_filled.html', applications = applications)
 
 
@@ -321,13 +326,14 @@ def submit_form():
 
     if "Choose University" in universities:
         universities.remove("Choose University")
-
+    print(universities)
     applicant_universities = []
     for university_name in universities:
         university = University.query.filter_by(name=university_name).first()
         if university:
             applicant_universities.append(university)
 
+    print(applicant_universities)
 
     cv = CV(experience=experience)
     cv.universities = applicant_universities
@@ -336,7 +342,7 @@ def submit_form():
     db.session.commit()
 
     applicant = Applicant(first_name=first_name, last_name=last_name)
-    applicant.id_cv = cv.id
+    applicant.cv = cv
 
     db.session.add(applicant)
     db.session.commit()

@@ -24,11 +24,11 @@ input[type="text"] {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
-    background-color: #4CAF50;
+    background-color: #4c57af;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 .send-order-button:hover {
-    background-color: #45a049;
+    background-color: #151982;
 }
