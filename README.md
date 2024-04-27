@@ -1,5 +1,6 @@
 # HW3 Databases
 
+## Domain: Work and Travel
 ## How to run application
 ### Under Windows
 ```
